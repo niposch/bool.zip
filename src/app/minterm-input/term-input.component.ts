@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import {Minterm} from "../models/minterm";
+import {term} from "../models/term";
 import {GetMintermCount, GetMintermVariables} from "../helper/MintermHelper";
 
 @Component({
-  selector: 'app-minterm-input',
-  templateUrl: './minterm-input.component.html',
-  styleUrls: ['./minterm-input.component.css']
+  selector: 'app-term-input',
+  templateUrl: './term-input.component.html',
+  styleUrls: ['./term-input.component.css']
 })
-export class MintermInputComponent implements OnInit {
+export class TermInputComponent implements OnInit {
 
-  public mintermList:Minterm[];
+  public termList:term[];
   public variableCount:number = 3;
   public variableNames: string[];
   constructor() {
-    this.mintermList = new Array<Minterm>();
+    this.termList = new Array<term>();
     this.variableNames = new Array<string>();
     this.initializeComponent();
   }
@@ -27,16 +27,16 @@ export class MintermInputComponent implements OnInit {
   }
 
   initializeComponent():void{
-    this.mintermList = new Array<Minterm>();
+    this.termList = new Array<term>();
     let mintermCount = GetMintermCount(this.variableCount);
-    this.mintermList.push(new Minterm(this.variableCount));
+    this.termList.push(new term(this.variableCount));
     this.variableNames = GetMintermVariables(this.variableCount);
   }
 
-  removeTerm(termToRemove:Minterm){
-    this.mintermList = this.mintermList.filter(term => term != termToRemove)
+  removeTerm(termToRemove:term){
+    this.termList = this.termList.filter(term => term != termToRemove)
   }
   addNewTerm(){
-    this.mintermList.push(new Minterm(this.variableCount))
+    this.termList.push(new term(this.variableCount))
   }
 }

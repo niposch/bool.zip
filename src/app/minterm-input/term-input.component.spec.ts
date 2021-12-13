@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MintermInputComponent } from './minterm-input.component';
+import { TermInputComponent } from './term-input.component';
 
 describe('MintermInputComponent', () => {
-  let component: MintermInputComponent;
-  let fixture: ComponentFixture<MintermInputComponent>;
+  let component: TermInputComponent;
+  let fixture: ComponentFixture<TermInputComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MintermInputComponent ]
+      declarations: [ TermInputComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MintermInputComponent);
+    fixture = TestBed.createComponent(TermInputComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

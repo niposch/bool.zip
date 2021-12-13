@@ -1,6 +1,6 @@
 
 // einzelne Zeile einer Ausgangstabelle
-export class Minterm{
+export class term {
   public values:boolean[]
   public result:boolean;
   constructor(varCount:number) {

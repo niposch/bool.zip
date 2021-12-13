@@ -9,5 +9,3 @@ export interface MintermTable{
   // 2st array contains all minterms with 2 bits set to 1
   mintermGrouping:Array<Array<Minterm>>;
 }
-
-
