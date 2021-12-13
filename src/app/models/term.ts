@@ -1,13 +1,14 @@
 
+
 // einzelne Zeile einer Ausgangstabelle
 export class term {
-  public values:boolean[]
-  public result:boolean;
+  public values:number[]
+  public result:number;
   constructor(varCount:number) {
-    this.values = new Array<boolean>();
+    this.values = new Array<number>();
     for (let i = 0; i<varCount; i++){
-      this.values.push(false);
+      (this as any)[i] = 0;
     }
-    this.result = false;
+    this.result = 0;
   }
 }

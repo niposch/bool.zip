@@ -6,25 +6,25 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
   styleUrls: ['./variable-input.component.css']
 })
 export class VariableInputComponent implements OnInit {
-
-  @Input()
   public possibleSelections: Array<LabelSelection> = new Array<LabelSelection>();
 
-  @Output()
-  public onChange = new EventEmitter<LabelSelection>();
+  @Input()
   public currentIndex:number = 0;
+
+  @Output()
+  public currentIndexChange = new EventEmitter<number>();
   constructor() { }
 
   ngOnInit(): void {
-    if(this.possibleSelections.length == 0){
-      this.possibleSelections.push({label:"0", value:0})
-      this.possibleSelections.push({label:"1", value:1})
-      this.possibleSelections.push({label:"-", value:2})
-    }
+    this.possibleSelections.push({label:"0", value:0})
+    this.possibleSelections.push({label:"1", value:1})
+    this.possibleSelections.push({label:"-", value:2})
   }
   onClick(event:any){
+    console.log(event)
     this.currentIndex += 1;
     if(this.currentIndex >= this.possibleSelections.length) this.currentIndex = 0;
+    this.currentIndexChange.emit(this.currentIndex);
   }
 }
 

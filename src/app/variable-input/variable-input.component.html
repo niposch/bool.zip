@@ -1,4 +1,4 @@
 
 <div *ngIf="possibleSelections.length > 0">
-  <button (click)="onClick($event)">{{this.possibleSelections[currentIndex].label}}</button>
+  <button mat-stroked-button (click)="onClick($event)">{{this.possibleSelections[currentIndex].label}}</button>
 </div>
