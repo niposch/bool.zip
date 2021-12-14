@@ -1,6 +1,6 @@
 
 export interface Minterm{
-  varMultipliers:Array<number>;
+  varMultipliers:Array<0|1|2>;
   isUsed:boolean;
 }
 
