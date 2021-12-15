@@ -76,7 +76,9 @@ export class TermInputComponent implements OnInit{
   }
 
   removeTerm(termToRemove:{[varName: string]: number}){
-    this.termList = this.termList.filter(term => term != termToRemove)
+    if(this.termList.length > 1){
+      this.termList = this.termList.filter(term => term != termToRemove)
+    }
   }
   addNewTerm(){
     this.termList = [...this.termList, this.createEmptyTerm()];

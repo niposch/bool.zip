@@ -1,3 +1,5 @@
+# Github Pages
+- the site is available [here](https://ps100000.github.io/bool.zip/)
 # GTIEinreichung
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.0.4.
