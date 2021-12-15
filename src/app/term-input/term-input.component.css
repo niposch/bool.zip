@@ -1,3 +1,15 @@
-button {
-: 8px;
+table {
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 25px;
+  margin-top: 25px;
+}
+.example-container {
+  min-width: available;
+  width: 100%;
+  display:flex ;
+  padding-bottom: 25px;
+  padding-top: 25px;
+  overflow: auto;
 }

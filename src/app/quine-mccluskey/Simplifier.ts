@@ -3,18 +3,23 @@ import {Term} from "../models/term";
 import {group} from "@angular/animations";
 
 
-export function simplify(terms:Array<Term>, allEvaluateTo: 0|1) {
-  terms = [...new Set(terms)] // make terms unique
+export function simplify(inpterms:Array<Term>, allEvaluateTo: 0|1):Array<Minterm> {
+  let terms = new Array<Term>();
+  for(let i = 0; i<inpterms.length; i++){
+    if(!terms.some(t => t.values.toString() == inpterms[i].values.toString()))
+      terms.push(inpterms[i]);
+  }
 
   // convert terms to minterm
   let minterms: Array<Minterm> = terms.map(term => {
     return {varMultipliers: term.values, isUsed: false} as Minterm;
   })
   // jede dieser anweisungen als einzelne Funktion:
-  // groupen der minterme
   let mintermTable = groupMinterms(minterms);
-  simplifyMintermsToPrimeImplicants(mintermTable, allEvaluateTo);
+  let primeImplicants = simplifyMintermsToPrimeImplicants(mintermTable, allEvaluateTo);
   // nach essentiellen primimplikanten suchen
+  let primeterms = primeImplicants.map(prime => {return {result:allEvaluateTo, values:[...prime.varMultipliers]} as Term})
+  return findEssentialPrimimplicants(terms, primeImplicants);
   // findEssentialPrimimplicants(terms,mintermTable);
 }
 // returns prime implicants
@@ -105,7 +110,7 @@ export function isTermCoveredByPrimimplicant(term: Term, primimplicant: Minterm)
 
 
 
-export function findEssentialPrimimplicants(terms: Array<Term>, mintermTable:MintermTable):Array<Minterm>{
+export function findEssentialPrimimplicants(terms: Array<Term>, primimplicants:Array<Minterm>):Array<Minterm>{
   const essential: Minterm[] = [];
   const print = (t: string[][], aa: number) => {
     let x = "\n";
@@ -115,10 +120,10 @@ export function findEssentialPrimimplicants(terms: Array<Term>, mintermTable:Min
       }
       x +=  "\n";
     }
-    console.log(x, aa);
+    console.log('table',x, aa);
   }
 
-  const primimplicants = mintermTable.mintermGrouping.reduce((all, group) => [...all, ...group], []);
+  //const primimplicants = mintermTable.mintermGrouping.reduce((all, group) => [...all, ...group], []);
 
   let primimplicantTable: string[][] = [];
   for (const primimplicant of primimplicants) {
@@ -128,17 +133,14 @@ export function findEssentialPrimimplicants(terms: Array<Term>, mintermTable:Min
     }
     primimplicantTable.push(column);
   }
-  print(primimplicantTable, -1);
 
-  let updated: boolean;
   let kill = 0;
   do {
-    updated = false;
     for (let x = 0; x < terms.length; x++) {
       let count = 0;
       let row = -1;
       for (let y = 0; y < primimplicants.length; y++) {
-        if (primimplicantTable[y][x] !== '_________________') {
+        if (primimplicantTable[y][x][0] !== '_') {
           row = y;
           count++;
           if (count >= 2) {
@@ -147,9 +149,8 @@ export function findEssentialPrimimplicants(terms: Array<Term>, mintermTable:Min
         }
       }
       if (count === 1) {
-        updated = true;
         for (let x = terms.length - 1; x >= 0; x--) {
-          if (primimplicantTable[row][x] !== '_________________') {
+          if (primimplicantTable[row][x][0] !== '_') {
             for (let y = 0; y < primimplicants.length; y++) {
               primimplicantTable[y].splice(x, 1);
             }
@@ -158,14 +159,34 @@ export function findEssentialPrimimplicants(terms: Array<Term>, mintermTable:Min
         }
         primimplicantTable.splice(row, 1);
         essential.push(...primimplicants.splice(row, 1));
-        print(primimplicantTable, kill);
-        console.log(essential, primimplicants, terms, kill);
       }
     }
+
+
+    for (let y = primimplicants.length - 1; y >= 0; y--) {
+      let usedCount = 0;
+      let maybeBetter = [...primimplicants.keys()];
+      maybeBetter.splice(y,1);
+      for (let x = 0; x < terms.length; x++) {
+        if (primimplicantTable[y][x][0] !== '_') {
+          usedCount++;
+          maybeBetter = maybeBetter.filter(mb => {
+            return primimplicantTable[mb][x][0] !== '_'
+          });
+        }
+      }
+
+      if (!usedCount || maybeBetter.length) {
+        primimplicantTable.splice(y, 1);
+        primimplicants.splice(y, 1);
+      }
+    }
+    print(primimplicantTable, kill);
     if(++kill > 10)
       break;
-  } while (updated && terms.length && primimplicants.length);
-  throw new Error("Not Implemented");
+  } while (terms.length && primimplicants.length);
+
+  return essential;
 }
 
 export function areCombineable(termA:Minterm, termB:Minterm){

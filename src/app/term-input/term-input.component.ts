@@ -1,7 +1,8 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import { GetMintermVariables } from "../helper/MintermHelper";
+import {Term} from "../models/term";
 
-export interface Term {
+export interface InputTerm {
   [varName: string]: number
 }
 
@@ -10,14 +11,17 @@ export interface Term {
   templateUrl: './term-input.component.html',
   styleUrls: ['./term-input.component.css']
 })
-export class TermInputComponent implements OnInit {
+export class TermInputComponent implements OnInit{
 
   @Output()
-  public termList: Term[] = [];
-  @Input()
-  public variableCount:number = 3;
-  @Output()
-  public variableCountChange = new EventEmitter<number>();
+  public termsChange = new EventEmitter<Term[]>();
+  public termList: InputTerm[] = [];
+  _variableCount = 0;
+  @Input() set variableCount(newNumber:number){
+    this._variableCount = newNumber;
+    this.variableNames = GetMintermVariables(newNumber);
+    this.variableCountChanged()
+  }
   @Output()
   public variableNames: string[] = [];
   public rowNames: string[] = [];
@@ -28,18 +32,24 @@ export class TermInputComponent implements OnInit {
   onVarCountChange(event:any){
 
   }
-  public termType:boolean = false; // true=> all 1, false => all 0 terms
-  changeTermType(){
-    this.termType = !this.termType;
+  public termType:boolean = true;
+  @Input()
+  public set termsEvalueateTo(value:boolean){  // true=> all 1, false => all 0 terms
+    this.termType = value;
   }
-  ngOnInit(): void {
+  @Output()
+  public termsEvalueateToChange = new EventEmitter<boolean>(); // emits new result of all terms
+  changeTermsResult(){
+    // TODO uncommend if maxterms are supported
+    //this.termType = !this.termType;
+    //this.termsEvalueateToChange.emit(this.termType)
   }
-  variableCountChanged(event:Event):void{
-    const input = event.target as HTMLInputElement;
-    this.variableCount = parseInt(input.value);
-    this.variableNames = GetMintermVariables(this.variableCount);
 
-    this.variableCountChange.emit(this.variableCount)
+  ngOnInit(): void {
+    this.termDataChanged()
+  }
+  variableCountChanged():void{
+    this.variableNames = GetMintermVariables(this._variableCount);
 
     this.rowNames = [...this.variableNames, 'result', 'actions'];
     const empty = this.createEmptyTerm();
@@ -52,6 +62,12 @@ export class TermInputComponent implements OnInit {
     );
   }
 
+  termDataChanged(){
+    this.termsChange.emit(this.termList.map(termListel => {
+      let values = this.variableNames.map(name => termListel[name]as 0|1|2);
+      return {values: values, result:0} as Term
+    }))
+  }
   initializeComponent():void{
     this.termList = [];
     this.variableNames = GetMintermVariables(this.variableCount);
@@ -59,15 +75,15 @@ export class TermInputComponent implements OnInit {
     this.termList.push(this.createEmptyTerm());
   }
 
-  removeTerm(term:{[varName: string]: number}){
-    // TODO implement this
-    console.log(term);
+  removeTerm(termToRemove:{[varName: string]: number}){
+    this.termList = this.termList.filter(term => term != termToRemove)
   }
   addNewTerm(){
     this.termList = [...this.termList, this.createEmptyTerm()];
+    this.termDataChanged();
   }
 
-  createEmptyTerm(): Term {
+  createEmptyTerm(): InputTerm {
     return this.variableNames.reduce((prev, curr) => ({...prev, [curr]: 0}), {});
   }
 
@@ -81,7 +97,7 @@ export class TermInputComponent implements OnInit {
       }
       return 0;
     });
-
+/*
     let same = true;
     let i = 1;
     while (same) {
@@ -99,7 +115,7 @@ export class TermInputComponent implements OnInit {
         }
       }
     }
-
+*/
     this.termList = [...this.termList];
   }
 }

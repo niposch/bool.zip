@@ -1,2 +1,53 @@
-<h2>{{variableCount}}</h2>
-<app-term-input [(variableCount)]="variableCount"></app-term-input>
+<div class="v-flex">
+
+  <mat-card class="card-margin">
+
+    <mat-card-title>Description</mat-card-title>
+    <mat-card-content>
+      <p>This application can be used to minimize boolean functions. It uses the <a style="color: #c2185b" href="https://en.wikipedia.org/wiki/Quine%E2%80%93McCluskey_algorithm">Quine-McCluskey Algorithm</a>.</p>
+      <h2>Symbols</h2>
+      <p>* symbolizes the logical and operation. </p>
+      <p>+ symbolizes the logical or operation. </p>
+      <p>! symbolizes the negation.</p>
+      <p>- symbolizes dont care (can either be 0 or 1).</p>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="card-margin">
+
+    <mat-card-title>Input</mat-card-title>
+    <mat-card-content>
+
+      <!--<button mat-flat-button color="primary" (click)="changeTermType()">insert terms that evaluate to {{this.termType ? 0 : 1}}s</button>-->
+      <p>Please select the variable count.</p>
+      <mat-form-field>
+        <input matInput type="number" placeholder="Variablenanzahl" id="varcount-input" [value]="variableCount"
+               (change)="variableCountChanged($event)">
+      </mat-form-field>
+      <p>Please insert all terms that evaluate to {{this.termType ? 1 : 0}}.</p>
+      <p>The output is updated as you insert terms.</p>
+      <div>
+        <app-term-input [(termsEvalueateTo)]="this.termType"
+                        (termsChange)="termChanged($event)" [variableCount]="variableCount"></app-term-input>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="card-margin">
+
+    <mat-card-title>Output</mat-card-title>
+
+    <mat-card-content>
+
+      <span>f({{variableNames}}) = </span>
+      <div *ngFor="let e of output">{{e}}</div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="card-margin">
+
+    <mat-card-title>Source Code</mat-card-title>
+    <mat-card-content>
+      <p>The source code is available <a style="color:#c2185b" href="https://github.com/ps100000/bool.zip">here</a>.</p>
+      <p> This application was developed by <a style="color: #c2185b" href="https://github.com/ps100000">@ps100000</a> and <a style="color: #c2185b" href="https://github.com/niposch">@niposch</a>. </p>
+
+    </mat-card-content>
+  </mat-card>
+</div>

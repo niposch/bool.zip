@@ -1,34 +1,33 @@
+<div class="example-container">
+
+
+    <!--TODO allow user to enter all terms that evaluate to 1s or that evaluate to 0s-->
+
+    <table mat-table table- [dataSource]="termList" class="mat-elevation-z8">
+
+      <ng-container *ngFor="let name of variableNames"  [matColumnDef]="name">
+        <th mat-header-cell *matHeaderCellDef> {{name}} </th>
+        <td mat-cell *matCellDef="let element"> <app-variable-input [(currentIndex)]="element[name]" (currentIndexChange)="termDataChanged()" ></app-variable-input> </td>
+      </ng-container>
+      <ng-container matColumnDef="result">
+        <th mat-header-cell *matHeaderCellDef> result</th>
+        <td mat-cell  *matCellDef="let element"> <button disabled (click)="changeTermsResult()" mat-stroked-button >{{this.termType ? 1 : 0}}</button> </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell  *matHeaderCellDef >actions</th>
+        <td mat-cell *matCellDef="let element" >
+          <button (click)="removeTerm(element)" mat-button>Delete</button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="rowNames"></tr>
+      <tr mat-row *matRowDef="let row; columns: rowNames;"></tr>
+    </table>
+
+
+</div>
 <div>
-  <h1>Eingabe</h1>
-  <mat-form-field>
-    <input matInput type="number" placeholder="Variablenanzahl" id="varcount-input" [value]="variableCount" (change)="variableCountChanged($event)">
-  </mat-form-field>
-  <!--TODO allow user to enter all terms that evaluate to 1s or that evaluate to 0s-->
-  <button mat-flat-button color="primary" (click)="changeTermType()">insert terms that evaluate to {{this.termType ? 0 : 1}}s</button>
-  <h1>Insert all terms that evaluate to {{this.termType ? 1 : 0}}</h1>
-
-  <table mat-table [dataSource]="termList" class="mat-elevation-z8">
-
-    <ng-container *ngFor="let name of variableNames"  [matColumnDef]="name">
-      <th mat-header-cell *matHeaderCellDef> {{name}} </th>
-      <td mat-cell *matCellDef="let element"> <app-variable-input [(currentIndex)]="element[name]"></app-variable-input> </td>
-    </ng-container>
-    <ng-container matColumnDef="result">
-      <th mat-header-cell *matHeaderCellDef> result</th>
-      <td mat-cell *matCellDef="let element"> <button mat-stroked-button disabled>{{this.termType ? 1 : 0}}</button> </td>
-    </ng-container>
-
-    <ng-container matColumnDef="actions">
-      <mat-header-cell  *matHeaderCellDef > Actions </mat-header-cell>
-      <mat-cell *matCellDef="let row" >
-        <button *matCellDef="let element" (click)="removeTerm(element)" mat-button>Delete</button>
-      </mat-cell>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="rowNames"></tr>
-    <tr mat-row *matRowDef="let row; columns: rowNames;"></tr>
-  </table>
-
   <button mat-flat-button color="primary" (click)="addNewTerm()">add new term</button>
-  <button (click)="sort()">sort</button>
+  <button mat-flat-button color="primary" (click)="sort()">sort</button>
 </div>

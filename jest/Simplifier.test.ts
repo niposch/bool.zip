@@ -5,7 +5,6 @@ import {
   groupMinterms, insertIntoMintermTable, simplifyMintermsToPrimeImplicants,
   simplifyMintermTable
 } from "../src/app/quine-mccluskey/Simplifier";
-import {AppComponent} from "../src/app/app.component";
 
 
 describe("Simplifier Tests", () => {
@@ -276,12 +275,11 @@ describe("Simplifier Helper", () => {
     insertIntoMintermTable(mintermTable, {varMultipliers: [1, 1, 1, 1], isUsed: false})
     expect(mintermTable.mintermGrouping.length).toBe(5)
     expect(mintermTable.mintermGrouping[4][0]).toEqual({varMultipliers: [1, 1, 1, 1], isUsed: false})
-
-
   })
 
   it("should find dominant primimplicants", () => {
-    findEssentialPrimimplicants([
+
+    expect(findEssentialPrimimplicants([
       {values: [0, 0, 0, 0], result: 1},
       {values: [0, 0, 0, 1], result: 1},
       {values: [0, 1, 0, 0], result: 1},
@@ -292,16 +290,18 @@ describe("Simplifier Helper", () => {
       {values: [1, 0, 0, 1], result: 1},
       {values: [1, 0, 1, 1], result: 1},
       {values: [1, 1, 1, 1], result: 1}
-    ], {
-      essentialTerms:[],
-      mintermGrouping: [
-        [{varMultipliers: [1,0,2,1], isUsed: false}],
-        [{varMultipliers: [2,1,1,1], isUsed: false}],
-        [{varMultipliers: [1,2,1,1], isUsed: false}],
-        [{varMultipliers: [0,2,0,2], isUsed: false}],
-        [{varMultipliers: [2,0,0,2], isUsed: false}],
-        [{varMultipliers: [0,1,2,2], isUsed: false}]
+    ],  [
+        {varMultipliers: [1,0,2,1], isUsed: false},
+        {varMultipliers: [2,1,1,1], isUsed: false},
+        {varMultipliers: [1,2,1,1], isUsed: false},
+        {varMultipliers: [0,2,0,2], isUsed: false},
+        {varMultipliers: [2,0,0,2], isUsed: false},
+        {varMultipliers: [0,1,2,2], isUsed: false}
       ]
-    });
+    ).sort()).toEqual([
+      {varMultipliers: [0,1,2,2], isUsed: false},
+      {varMultipliers: [2,0,0,2], isUsed: false},
+      {varMultipliers: [1,2,1,1], isUsed: false},
+    ]);
   })
 });
