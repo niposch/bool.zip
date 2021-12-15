@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { GetMintermVariables } from "../helper/MintermHelper";
 
 export interface Term {
@@ -12,14 +12,22 @@ export interface Term {
 })
 export class TermInputComponent implements OnInit {
 
+  @Output()
   public termList: Term[] = [];
+  @Input()
   public variableCount:number = 3;
+  @Output()
+  public variableCountChange = new EventEmitter<number>();
+  @Output()
   public variableNames: string[] = [];
   public rowNames: string[] = [];
   constructor() {
     this.initializeComponent();
   }
 
+  onVarCountChange(event:any){
+
+  }
   public termType:boolean = false; // true=> all 1, false => all 0 terms
   changeTermType(){
     this.termType = !this.termType;
@@ -30,6 +38,9 @@ export class TermInputComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     this.variableCount = parseInt(input.value);
     this.variableNames = GetMintermVariables(this.variableCount);
+
+    this.variableCountChange.emit(this.variableCount)
+
     this.rowNames = [...this.variableNames, 'result', 'actions'];
     const empty = this.createEmptyTerm();
     this.termList = this.termList.map((it) =>

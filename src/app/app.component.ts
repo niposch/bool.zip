@@ -7,4 +7,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'GTIEinreichung';
+  public variableCount = 3;
 }
