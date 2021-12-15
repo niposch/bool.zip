@@ -1,7 +1,7 @@
 
 
 // einzelne Zeile einer Ausgangstabelle
-export class term {
+export class Term {
   public values:number[]
   public result:number;
   constructor(varCount:number) {

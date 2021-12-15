@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {term} from "../models/term";
-import {GetMintermCount, GetMintermVariables} from "../helper/MintermHelper";
-import {LabelSelection} from "../variable-input/variable-input.component";
+import { GetMintermVariables } from "../helper/MintermHelper";
+
+export interface Term {
+  [varName: string]: number
+}
 
 @Component({
   selector: 'app-term-input',
@@ -10,7 +12,7 @@ import {LabelSelection} from "../variable-input/variable-input.component";
 })
 export class TermInputComponent implements OnInit {
 
-  public termList: {[varName: string]: number}[] = [];
+  public termList: Term[] = [];
   public variableCount:number = 3;
   public variableNames: string[] = [];
   public rowNames: string[] = [];
@@ -27,15 +29,23 @@ export class TermInputComponent implements OnInit {
   variableCountChanged(event:Event):void{
     const input = event.target as HTMLInputElement;
     this.variableCount = parseInt(input.value);
-    this.initializeComponent();
+    this.variableNames = GetMintermVariables(this.variableCount);
+    this.rowNames = [...this.variableNames, 'result', 'actions'];
+    const empty = this.createEmptyTerm();
+    this.termList = this.termList.map((it) =>
+      this.variableNames.reduce((prev, name) => {
+        if(it[name])
+          prev[name] = it[name];
+        return prev;
+      }, {...empty})
+    );
   }
 
   initializeComponent():void{
     this.termList = [];
-    let mintermCount = GetMintermCount(this.variableCount);
     this.variableNames = GetMintermVariables(this.variableCount);
-    this.rowNames = [...this.variableNames, 'result', 'actions']
-    this.termList.push(this.variableNames.reduce((prev, curr) => ({...prev, [curr]: 0}), {}));
+    this.rowNames = [...this.variableNames, 'result', 'actions'];
+    this.termList.push(this.createEmptyTerm());
   }
 
   removeTerm(term:{[varName: string]: number}){
@@ -43,7 +53,11 @@ export class TermInputComponent implements OnInit {
     console.log(term);
   }
   addNewTerm(){
-    this.termList = [...this.termList,this.variableNames.reduce((prev, curr) => ({...prev, [curr]: 0}), {})];
+    this.termList = [...this.termList, this.createEmptyTerm()];
+  }
+
+  createEmptyTerm(): Term {
+    return this.variableNames.reduce((prev, curr) => ({...prev, [curr]: 0}), {});
   }
 
   sort(){
@@ -56,6 +70,25 @@ export class TermInputComponent implements OnInit {
       }
       return 0;
     });
+
+    let same = true;
+    let i = 1;
+    while (same) {
+      for (; i < this.termList.length; i++) {
+        same = true;
+        for (const variableName of this.variableNames) {
+          if (this.termList[i - 1][variableName] !== this.termList[i][variableName]) {
+            same = false;
+            break;
+          }
+        }
+        if (same) {
+          this.termList.splice(i);
+          break;
+        }
+      }
+    }
+
     this.termList = [...this.termList];
   }
 }
