@@ -41,18 +41,23 @@ export class AppComponent implements OnInit {
     this.variableNames = GetMintermVariables(this.variableCount);
     this.output = []
     for(let i = 0; i<primImplicants.length; i++){
-      this.output.push(primImplicants[i].varMultipliers.map((v, index) => {
-        if(v == 0) {
-          return "!" + this.variableNames[index] + " *"
-        }
-        if(v == 1) {
-          return this.variableNames[index] + " *"
-        }
-        if(v == 2) {
+      if(primImplicants[i].varMultipliers.every(v => v == 2)){
+        this.output.push("1 +")
+      }
+      else{
+        this.output.push(primImplicants[i].varMultipliers.map((v, index) => {
+          if(v == 0) {
+            return "!" + this.variableNames[index] + " *"
+          }
+          if(v == 1) {
+            return this.variableNames[index] + " *"
+          }
+          if(v == 2) {
+            return "";
+          }
           return "";
-        }
-        return "";
-      }).filter(el => el != "").join(" ").slice(0,-1) + ' +');
+        }).filter(el => el != "").join(" ").slice(0,-1) + ' +');
+      }
     }
     if(this.output.length > 0){
       this.output[this.output.length - 1] = this.output[this.output.length - 1].slice(0,-2);

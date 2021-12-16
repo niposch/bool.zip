@@ -35,10 +35,12 @@
 
     <mat-card-title>Output</mat-card-title>
 
-    <mat-card-content>
+    <mat-card-content class="d-flex flex-row">
 
-      <span>f({{variableNames}}) = </span>
-      <div *ngFor="let e of output">{{e}}</div>
+      <span >f({{variableNames}}) =&nbsp;</span>
+      <div>
+        <span *ngFor="let e of output">{{e}}<br></span>
+      </div>
     </mat-card-content>
   </mat-card>
   <mat-card class="card-margin">
