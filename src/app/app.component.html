@@ -20,7 +20,7 @@
       <!--<button mat-flat-button color="primary" (click)="changeTermType()">insert terms that evaluate to {{this.termType ? 0 : 1}}s</button>-->
       <p>Please select the variable count.</p>
       <mat-form-field>
-        <input max="26" min="1" matInput type="number" placeholder="Variablenanzahl" id="varcount-input" [value]="variableCount"
+        <input max="26" min="1" matInput type="number" placeholder="Amount of Variables" id="varcount-input" [value]="variableCount"
                (change)="variableCountChanged($event)">
       </mat-form-field>
       <p>Please insert all terms that evaluate to {{this.termType ? 1 : 0}}.</p>
