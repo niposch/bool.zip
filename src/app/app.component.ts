@@ -29,6 +29,10 @@ export class AppComponent implements OnInit {
       this.variableCount = 26;
       input.value = "26";
     }
+    if(this.variableCount < 1){
+      this.variableCount = 1;
+      input.value = "1";
+    }
   }
   constructor(public sanitizer: DomSanitizer) {
   }

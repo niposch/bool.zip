@@ -13,3 +13,13 @@ table {
   padding-top: 25px;
   overflow: auto;
 }
+.mat-row {
+  border-right: 1px solid currentColor;
+  border-left: 1px solid currentColor;
+  text-align: center;
+}
+.mat-cell, .mat-header-cell{
+  padding-right: 10px;
+  text-align: center;
+  padding-left: 10px;
+}

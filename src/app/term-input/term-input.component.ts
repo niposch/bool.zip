@@ -51,7 +51,7 @@ export class TermInputComponent implements OnInit{
   variableCountChanged():void{
     this.variableNames = GetMintermVariables(this._variableCount);
 
-    this.rowNames = [...this.variableNames, 'result', 'actions'];
+    this.rowNames = ["sum",...this.variableNames, 'result', 'actions'];
     const empty = this.createEmptyTerm();
     this.termList = this.termList.map((it) =>
       this.variableNames.reduce((prev, name) => {
@@ -71,7 +71,7 @@ export class TermInputComponent implements OnInit{
   initializeComponent():void{
     this.termList = [];
     this.variableNames = GetMintermVariables(this.variableCount);
-    this.rowNames = [...this.variableNames, 'result', 'actions'];
+    this.rowNames = ["sum",...this.variableNames, 'result', 'actions'];
     this.termList.push(this.createEmptyTerm());
   }
 
@@ -79,6 +79,22 @@ export class TermInputComponent implements OnInit{
     if(this.termList.length > 1){
       this.termList = this.termList.filter(term => term != termToRemove)
     }
+  }
+  hasDontCares(element:{[varName: string]: number}){
+    for(let i = 0; i<this.variableNames.length; i++){
+      if(element[this.variableNames[i]] == 2){
+        return true;
+      }
+    }
+    return false;
+  }
+  convertVarsToNumber(element:{[varName: string]: number}):number{
+    let out = 0;
+    for(let i = 0; i<this.variableNames.length; i++){
+      out += element[this.variableNames[i]] * Math.pow(2,this.variableNames.length - i-1);
+    }
+
+    return out;
   }
   addNewTerm(){
     this.termList = [...this.termList, this.createEmptyTerm()];
