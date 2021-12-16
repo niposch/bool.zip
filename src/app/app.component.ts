@@ -25,6 +25,10 @@ export class AppComponent implements OnInit {
   public variableCountChanged(event:Event){
     let input = event.target as HTMLInputElement;
     this.variableCount = parseInt(input.value)
+    if(this.variableCount > 26){
+      this.variableCount = 26;
+      input.value = "26";
+    }
   }
   constructor(public sanitizer: DomSanitizer) {
   }
