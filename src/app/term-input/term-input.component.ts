@@ -79,6 +79,7 @@ export class TermInputComponent implements OnInit{
     if(this.termList.length > 1){
       this.termList = this.termList.filter(term => term != termToRemove)
     }
+    this.termDataChanged();
   }
   hasDontCares(element:{[varName: string]: number}){
     for(let i = 0; i<this.variableNames.length; i++){
