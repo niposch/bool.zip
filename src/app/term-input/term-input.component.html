@@ -23,7 +23,7 @@
       <ng-container matColumnDef="sum">
         <th mat-header-cell  *matHeaderCellDef >sum</th>
         <td mat-cell *matCellDef="let element" >
-          <button mat-stroked-button disabled>{{!hasDontCares(element) ? convertVarsToNumber(element):-1}}</button>
+          <button mat-stroked-button disabled>{{!hasDontCares(element) ? convertVarsToNumber(element):"&nbsp;"}}</button>
         </td>
       </ng-container>
 
